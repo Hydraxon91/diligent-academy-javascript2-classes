@@ -12,6 +12,8 @@ class CustomArray extends Array {
         });
 
         return result;
+
+        //Just realized this could have also been done with a reduce like sum
     }
 
     average(){
@@ -50,6 +52,7 @@ class CustomArray extends Array {
 function Publisher(){
     this.subscribers = []
 }
+
 Publisher.prototype.subscribe = function(subscriber){
     this.subscribers.push(subscriber)
 }
