@@ -148,3 +148,28 @@
 
 
 // Task 4: ### Implementing a Factory Function for Creating Objects
+
+function Factory(obj){
+    const returnObject = {};
+
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            returnObject[key] = obj[key];
+        }
+    }
+    return returnObject;
+}
+
+const diyCar = {
+    make: 'Toyota',
+    model: 'Camry',
+    drive() {
+        console.log('Vroom!');
+    }
+};
+
+diyCar.drive()
+
+const factoryCar = Factory(diyCar);
+
+factoryCar.drive();
