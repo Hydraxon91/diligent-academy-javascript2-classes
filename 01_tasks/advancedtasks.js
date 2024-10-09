@@ -147,29 +147,91 @@
 // eventSystem.emit('multiEvent');
 
 
-// Task 4: ### Implementing a Factory Function for Creating Objects
+// // Task 4: ### Implementing a Factory Function for Creating Objects
 
-function Factory(obj){
-    const returnObject = {};
+// function Factory(obj){
+//     const returnObject = {};
 
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            returnObject[key] = obj[key];
-        }
+//     for (const key in obj) {
+//         if (obj.hasOwnProperty(key)) {
+//             returnObject[key] = obj[key];
+//         }
+//     }
+//     return returnObject;
+// }
+
+// const diyCar = {
+//     make: 'Toyota',
+//     model: 'Camry',
+//     drive() {
+//         console.log('Vroom!');
+//     }
+// };
+
+// diyCar.drive()
+
+// const factoryCar = Factory(diyCar);
+
+// factoryCar.drive();
+
+// Task 5: ### Creating a Class-Based Component System
+
+class Component {
+    constructor(props){
+        this.props = props;
+        this.state = {};
     }
-    return returnObject;
+
+    render() {
+        throw new Error('Render method should be implemented in subclasses');
+    }
+
+    update(newState) {
+        this.state = { ...this.state, ...newState };
+        this.render(); 
+    }
+
+    updateProps(newProps) {
+        this.props = { ...this.props, ...newProps };
+    }
 }
 
-const diyCar = {
-    make: 'Toyota',
-    model: 'Camry',
-    drive() {
-        console.log('Vroom!');
+class Button extends Component {
+    render() {
+        return `<button>${this.props.label}</button>`;
     }
-};
 
-diyCar.drive()
+    componentDidMount() {
+        console.log('Button mounted!');
+    }
+}
 
-const factoryCar = Factory(diyCar);
+class VirtualDOM {
+    constructor() {
+        this.components = [];
+    }
 
-factoryCar.drive();
+    addComponent(component) {
+        this.components.push(component);
+        component.componentDidMount();
+    }
+
+    render() {
+        return this.components.map(component => component.render()).join('');
+    }
+
+    update() {
+        this.render();
+    }
+}
+
+
+const vdom = new VirtualDOM();
+
+const button = new Button({ label: 'Click Me' });
+vdom.addComponent(button);
+
+console.log(vdom.render());
+
+button.updateProps({ label: 'Click Me Too' });
+console.log(vdom.render()); 
